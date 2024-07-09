@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Recipe App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #28a745;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #f4f4f4;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+        }
+        li button {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Weekly Recipe App</h2>
+        <button onclick="generateRecipe()">Generate Recipe</button>
+        <ul id="recipeList"></ul>
+    </div>
+    <script>
+        const countries = ["Italy", "Japan", "Mexico", "India", "France"];
+        const recipes = {
+            "Italy": { dish: "Spaghetti Carbonara", dessert: "Tiramisu" },
+            "Japan": { dish: "Sushi", dessert: "Mochi" },
+            "Mexico": { dish: "Tacos", dessert: "Churros" },
+            "India": { dish: "Butter Chicken", dessert: "Gulab Jamun" },
+            "France": { dish: "Coq au Vin", dessert: "Crème Brûlée" }
+        };
+        let pastSelections = [];
+
+        function generateRecipe() {
+            let country;
+            do {
+                country = countries[Math.floor(Math.random() * countries.length)];
+            } while (pastSelections.includes(country));
+
+            const recipe = recipes[country];
+            pastSelections.push(country);
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <strong>${country}</strong>: ${recipe.dish} and ${recipe.dessert}
+                <button onclick="removeRecipe(this)">Remove</button>
+                <br>
+                <label>Rating: </label>
+                <input type="number" min="1" max="5" onchange="rateRecipe(this, '${country}')">
+                <br>
+                <label>Notes: </label>
+                <textarea onchange="addNotes(this, '${country}')"></textarea>
+            `;
+            document.getElementById('recipeList').appendChild(li);
+        }
+
+        function removeRecipe(button) {
+            const li = button.parentElement;
+            li.remove();
+        }
+
+        function rateRecipe(input, country) {
+            const rating = input.value;
+            console.log(`Rated ${country} recipe: ${rating} stars`);
+        }
+
+        function addNotes(textarea, country) {
+            const notes = textarea.value;
+            console.log(`Notes for ${country} recipe: ${notes}`);
+        }
+    </script>
+</body>
+</html>
